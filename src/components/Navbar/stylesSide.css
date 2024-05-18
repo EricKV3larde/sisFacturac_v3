@@ -1,0 +1,15 @@
+.buttonLO {
+    background-color: #ff4b5c; /* Color de fondo */
+    color: #ffffff; /* Color del texto */
+    border: none; /* Sin borde */
+    padding: 10px 20px; /* Relleno */
+    font-size: 16px; /* Tamaño de fuente */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    transition: background-color 0.3s ease; /* Transición para el cambio de color de fondo */
+    margin-top: 2vh;
+  }
+  
+  .buttonLO:hover {
+    background-color: #e04350; /* Color de fondo al pasar el cursor */
+  }

@@ -35,23 +35,28 @@ const App = () => {
 
   return (
     <AuthProvider>
-
-
       <BrowserRouter>
-        <Container>
-          <Routes>
-            <Route path="/" element={<ProtectedRoute element={<DashboardScreen />} />} />
-            <Route path="clients" element={<ProtectedRoute element={<ClientListScreen />} />} />
-            <Route path="products" element={<ProtectedRoute element={<ProductListScreen />} />} />
-            <Route path="invoices">
-              <Route path="" element={<ProtectedRoute element={<InvoiceListScreen />} />} exact />
-              <Route path=":id" element={<ProtectedRoute element={<InvoiceDetailScreen />} />} />
-            </Route>
-            <Route path="login" element={<Login />} />
-            <Route path="about" element={<ProtectedRoute element={<AboutScreen />} />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Container>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route
+            path="*"
+            element={
+              <Container>
+                <Routes>
+                  <Route path="dash" element={<ProtectedRoute element={<DashboardScreen />} />} />
+                  <Route path="clients" element={<ProtectedRoute element={<ClientListScreen />} />} />
+                  <Route path="products" element={<ProtectedRoute element={<ProductListScreen />} />} />
+                  <Route path="invoices">
+                    <Route path="" element={<ProtectedRoute element={<InvoiceListScreen />} />} exact />
+                    <Route path=":id" element={<ProtectedRoute element={<InvoiceDetailScreen />} />} />
+                  </Route>
+                  <Route path="about" element={<ProtectedRoute element={<AboutScreen />} />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </Container>
+            }
+          />
+        </Routes>
         <ToastContainer />
         <ClientDeleteConfirm />
         <ClientEditModal />

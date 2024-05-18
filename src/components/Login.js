@@ -1,29 +1,36 @@
 import React, { useState } from 'react';
-import { auth } from '../firebaseConfig.js';
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from "../context/authContext.js"
+import { useNavigate } from "react-router-dom";
 import './login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const auth = useAuth()
 
-  const handleLogin = async (e) => {
+
+
+  const handleLogin = (e) => {
     e.preventDefault();
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      console.log('Usuario autebnticado');
-    } catch (err) {
-      setError(err.message);
-    }
+    auth.login(email, password)
+      .then(() => {
+        navigate('/dash'); // Redirige a '/home' si el inicio de sesión es exitoso
+      })
+      .catch(() => {
+        alert('Datos incorrectos. Intenta nuevamente.'); // Muestra una alerta si falla
+      });
   };
-  
-   
+
+  const handleLogout = () => {
+    auth.logout()
+  }
   return (
     <div className="login-container">
       <div className="login-form">
         <h1>Iniciar Sesión</h1>
-        <form onSubmit={handleLogin}>
+        <form >
           <div>
             <label>Email:</label>
             <input
@@ -41,7 +48,9 @@ const Login = () => {
             />
           </div>
           {error && <p>{error}</p>}
-          <button type="submit">Iniciar Sesión</button>
+          <button onClick={(e) => handleLogin(e)}>Iniciar Sesión</button>
+          <br />
+
         </form>
       </div>
     </div>

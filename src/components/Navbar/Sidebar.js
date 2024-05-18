@@ -12,6 +12,10 @@ import SecurityIcon from "../Icons/SecurityIcon";
 import InvoiceNavbarLoading from "../Loading/InvoiceNavbarLoading";
 import { getCompanyData } from "../../store/companySlice";
 import Skeleton from "react-loading-skeleton";
+import { useAuth } from "../../context/authContext";
+import { useNavigate } from "react-router-dom";
+import './stylesSide.css';
+
 
 const NAV_DATA = [
   {
@@ -45,6 +49,9 @@ function Sidebar() {
   const { showNavbar, initLoading, toggleNavbar } = useAppContext();
   const { pathname } = useLocation();
   const company = useSelector(getCompanyData);
+  const { user } = useAuth();
+  const auth = useAuth()
+  const navigate = useNavigate();
 
   const onClickNavbar = useCallback(() => {
     const width = window.innerWidth;
@@ -55,7 +62,10 @@ function Sidebar() {
   }, [showNavbar, toggleNavbar]);
 
   const aboutRoute = useMemo(() => pathname === "/about", [pathname]);
-
+  const handleLogout = () => {
+    auth.logout()
+    navigate("/")
+  }
   return (
     <>
       <nav
@@ -84,6 +94,7 @@ function Sidebar() {
               <InvoiceNavbarLoading loop />
             </span>
             Facturación
+
           </motion.span>
         </div>
 
@@ -196,6 +207,7 @@ function Sidebar() {
             <DeleteIcon className="h-6 w-6 mr-4" />
             Borrar datos
           </motion.a>
+          <button onClick={() => handleLogout()} className='buttonLO'>Cerrar Sesión</button>
         </div>
       </nav>
     </>

@@ -11,15 +11,21 @@ import {
   getTotalBalance,
 } from "../../store/invoiceSlice";
 import NumberFormat from "react-number-format";
+import { useAuth } from "../../context/authContext";
 
 function DashboardWidgets() {
   const clients = useSelector(getAllClientsSelector);
   const products = useSelector(getAllProductSelector);
   const totalBalance = useSelector(getTotalBalance);
   const allInvoices = useSelector(getAllInvoiceSelector);
+  const { user } = useAuth();
 
   return (
     <>
+      <div>
+        <h1>Dashboard</h1>
+        {user && <p>Welcome, {user.name}!</p>}
+      </div>
       <div className="flex flex-wrap">
         <div className="w-full mb-3 md:w-1/2">
           <div className="p-4 bg-white rounded-xl md:mr-4 hover:shadow-sm">
