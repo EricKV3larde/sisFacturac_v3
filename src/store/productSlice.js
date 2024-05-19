@@ -34,7 +34,17 @@ export const productSlice = createSlice({
         name: "",
         amount: 0,
       };
-
+      // Validación del nombre: solo letras y números
+      const nameRegex = /^[a-zA-Z0-9]+$/;
+      if (action.payload.name && !nameRegex.test(action.payload.name)) {
+        // Si el nombre no es válido, mostrar un error o realizar otra acción
+        console.error("El nombre debe contener solo letras y números.");
+        return; // Detener la ejecución de la función
+      }
+      if (action.payload.name && !nameRegex.test(action.payload.name)) {
+        state.errors = { ...state.errors, name: "El nombre debe contener solo letras y números." };
+        return;
+      }
       state.newForm = { ...reNewForm };
       localforage.setItem(PRODUCT_FORM_KEY, reNewForm);
     },

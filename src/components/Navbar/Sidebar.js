@@ -20,7 +20,7 @@ import './stylesSide.css';
 const NAV_DATA = [
   {
     title: "Panel",
-    link: "/",
+    link: "/dash",
     Icon: HomeIcon,
   },
   {

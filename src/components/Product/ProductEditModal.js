@@ -85,27 +85,18 @@ function ProductEditModal(props) {
   }, [productForm]);
 
   useEffect(() => {
-      setValidForm((prev) => ({
-        id: true,
-        image: true,
-        name: productForm?.name?.trim() ? true : false,
-        amount: productForm?.amount <= 0 ? false : true,
-      }));
+    setValidForm((prev) => ({
+      id: true,
+      image: true,
+      name: productForm?.name?.trim() 
+               ? /^[a-zA-Z0-9 ]+$/.test(productForm?.name?.trim()) // Validación de letras y números
+               ? true : false 
+               : false, // Si el nombre no existe o está vacío, no es válido
+      amount: productForm?.amount <= 0 ? false : true,
+    }));
   }, [productForm]);
 
-  useEffect(() => {
-    if (editedID !== null) {
-      setAnimate(true);
-      const isFindIndex = products.findIndex(
-        (client) => client.id === editedID
-      );
-      if (isFindIndex !== -1) {
-        setProductForm({ ...products[isFindIndex] });
-      }
-    } else {
-      setAnimate(false);
-    }
-  }, [products, editedID]);
+
 
   return editedID !== null ? (
     <motion.div
@@ -157,8 +148,13 @@ function ProductEditModal(props) {
                                 value={productForm.productID}
                                 placeholder="ID del producto"
                                 className={defaultInputLargeStyle}
-                                onChange={(e) =>
-                                  handlerProductValue(e, "productID")
+                                onChange={(e) => {
+                                  const inputValue = e.target.value;
+                                  const regex = /^[0-9]{0,10}$/;
+                                  if ((regex.test(inputValue) || inputValue === "") && inputValue.length <= 10) {
+                                    handlerProductValue(e, "productID");
+                                  }
+                                }
                                 }
                               />
                             </div>
@@ -180,7 +176,15 @@ function ProductEditModal(props) {
                                     : defaultInputStyle
                                 }
                                 value={productForm.name}
-                                onChange={(e) => handlerProductValue(e, "name")}
+                                onChange={(e) => {
+                                  const inputValue = e.target.value;
+                                  // Expresión regular para validar que solo hay letras y números
+                                  const regex = /^[a-zA-Z0-9 ]*$/;
+                                  // Si el valor ingresado coincide con la expresión regular y tiene un máximo de 50 caracteres o es un valor vacío, actualiza el estado
+                                  if ((regex.test(inputValue) || inputValue === "") && inputValue.length <= 50) {
+                                    handlerProductValue(e, "name");
+                                  }
+                                }}
                               />
                             </div>
                           </div>
@@ -201,8 +205,15 @@ function ProductEditModal(props) {
                                     : defaultInputStyle
                                 }
                                 value={productForm.amount}
-                                onChange={(e) =>
-                                  handlerProductValue(e, "amount")
+                                onChange={(e) => {
+                                  const inputValue = e.target.value;
+                                  // Expresión regular para validar que solo hay números
+                                  const regex = /^\d{0,4}(\.\d{0,2})?$/;
+                                  // Si el valor ingresado coincide con la expresión regular y tiene un máximo de 6 dígitos, actualiza el estado
+                                  if (regex.test(inputValue) && inputValue.length <= 6) {
+                                    handlerProductValue(e, "amount");
+                                  }
+                                }
                                 }
                               />
                             </div>

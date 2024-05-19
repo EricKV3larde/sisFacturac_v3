@@ -23,6 +23,11 @@ import {
 } from "../../store/clientSlice";
 
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const nameRegex = /^[a-zA-Z ]{1,40}$/;
+
+const phoneRegex = /^[0-9]{9}$/;
+const addressRegex = /^[a-zA-Z0-9 ]{1,30}$/;
+
 
 const emptyForm = {
   id: "",
@@ -102,14 +107,22 @@ function QuickAddClient({ editForm }) {
   useEffect(() => {
     const isValidEmail =
       clientForm?.email?.trim() && clientForm?.email.match(emailRegex);
+    const isValidName =
+      clientForm?.name?.trim() && clientForm?.name.match(nameRegex);
+
+    const isValidPhone =
+      clientForm?.mobileNo?.trim() && clientForm?.mobileNo.trim().match(phoneRegex);
+
+    const isValidAddress =
+      clientForm?.billingAddress?.trim() && clientForm?.billingAddress.trim().match(addressRegex);
 
     setValidForm((prev) => ({
       id: true,
       image: true,
-      name: clientForm?.name?.trim() ? true : false,
+      name: isValidName ? true : false,
       email: isValidEmail ? true : false,
-      billingAddress: clientForm?.billingAddress?.trim() ? true : false,
-      mobileNo: clientForm?.mobileNo?.trim() ? true : false,
+      billingAddress: isValidAddress ? true : false,
+      mobileNo: isValidPhone ? true : false,
     }));
   }, [clientForm]);
 

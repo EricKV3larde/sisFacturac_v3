@@ -27,7 +27,10 @@ const emptyForm = {
 };
 
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const nameRegex = /^[a-zA-Z ]{1,40}$/;
 
+const phoneRegex = /^[0-9]{9}$/;
+const addressRegex = /^[a-zA-Z0-9 ]{1,30}$/;
 function ClientEditModal(props) {
   const dispatch = useDispatch();
   const editedID = useSelector(getEditedIdForm);
@@ -93,35 +96,26 @@ function ClientEditModal(props) {
   useEffect(() => {
     const isValidEmail =
       clientForm?.email?.trim() && clientForm?.email.match(emailRegex);
-
-    setValidForm((prev) => ({
-      id: true,
-      image: true,
-      name: clientForm?.name?.trim() ? true : false,
-      email: isValidEmail ? true : false,
-      billingAddress: clientForm?.billingAddress?.trim() ? true : false,
-      mobileNo: clientForm?.mobileNo?.trim() ? true : false,
-    }));
-  }, [clientForm]);
-  // validacion para nombre 
-
-  const nameRegex = /^[a-zA-Z]+$/; // Expresión regular para validar solo letras
-
-  useEffect(() => {
     const isValidName =
-      clientForm?.name?.trim().length <= 60 && // Validación de longitud máxima
-      nameRegex.test(clientForm?.name?.trim()); // Validación de solo letras
-  
+      clientForm?.name?.trim() && clientForm?.name.match(nameRegex);
+
+    const isValidPhone =
+      clientForm?.mobileNo?.trim() && clientForm?.mobileNo.trim().match(phoneRegex);
+
+    const isValidAddress =
+      clientForm?.billingAddress?.trim() && clientForm?.billingAddress.trim().match(addressRegex);
+
     setValidForm((prev) => ({
       id: true,
       image: true,
-      name: isValidName, // Utiliza isValidName aquí
-
-      billingAddress: clientForm?.billingAddress?.trim().length > 0,
-      mobileNo: clientForm?.mobileNo?.trim().length > 0,
+      name: isValidName ? true : false,
+      email: isValidEmail ? true : false,
+      billingAddress: isValidAddress ? true : false,
+      mobileNo: isValidPhone ? true : false,
     }));
   }, [clientForm]);
-  
+
+
 
   useEffect(() => {
     if (editedID !== null) {

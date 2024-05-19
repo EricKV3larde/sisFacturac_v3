@@ -134,7 +134,14 @@ function QuickAddProduct() {
                 value={productForm.productID}
                 placeholder="ID de producto"
                 className={defaultInputLargeStyle}
-                onChange={(e) => handlerProductValue(e, "productID")}
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  const regex = /^[0-9]{0,10}$/;
+                  if ((regex.test(inputValue) || inputValue === "") && inputValue.length <= 10) {
+                    handlerProductValue(e, "productID");
+                  }
+                }
+                }
                 disabled={isInitLoading}
               />
             </div>
@@ -164,7 +171,7 @@ function QuickAddProduct() {
                 onChange={(e) => {
                   const inputValue = e.target.value;
                   // Expresión regular para validar que solo hay letras y números
-                  const regex = /^[a-zA-Z0-9\s]*$/;
+                  const regex = /^[a-zA-Z0-9 ]*$/;
                   // Si el valor ingresado coincide con la expresión regular y tiene un máximo de 50 caracteres o es un valor vacío, actualiza el estado
                   if ((regex.test(inputValue) || inputValue === "") && inputValue.length <= 50) {
                     handlerProductValue(e, "name");
@@ -186,25 +193,25 @@ function QuickAddProduct() {
               <Skeleton className={defaultSkeletonNormalStyle} />
             ) : (
               <input
-              autoComplete="nope"
-              placeholder="Amount"
-              type="number"
-              className={
-                !validForm.amount && isTouched
-                  ? defaultInputInvalidStyle
-                  : defaultInputStyle
-              }
-              disabled={isInitLoading}
-              value={productForm.amount}
-              onChange={(e) => {
-                const inputValue = e.target.value;
-                // Expresión regular para validar que solo hay números
-                const regex = /^\d{0,4}(\.\d{0,2})?$/;
-                // Si el valor ingresado coincide con la expresión regular y tiene un máximo de 6 dígitos, actualiza el estado
-                if (regex.test(inputValue) && inputValue.length <= 6) {
-                  handlerProductValue(e, "amount");
+                autoComplete="nope"
+                placeholder="Amount"
+                type="number"
+                className={
+                  !validForm.amount && isTouched
+                    ? defaultInputInvalidStyle
+                    : defaultInputStyle
                 }
-              }}
+                disabled={isInitLoading}
+                value={productForm.amount}
+                onChange={(e) => {
+                  const inputValue = e.target.value;
+                  // Expresión regular para validar que solo hay números
+                  const regex = /^\d{0,4}(\.\d{0,2})?$/;
+                  // Si el valor ingresado coincide con la expresión regular y tiene un máximo de 6 dígitos, actualiza el estado
+                  if (regex.test(inputValue) && inputValue.length <= 6) {
+                    handlerProductValue(e, "amount");
+                  }
+                }}
               />
             )}
           </div>
