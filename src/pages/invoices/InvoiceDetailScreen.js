@@ -5,6 +5,7 @@ import React, {
   useState,
   useRef,
 } from "react";
+
 import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { useReactToPrint } from "react-to-print";
@@ -90,6 +91,7 @@ function InvoiceDetailScreen(props) {
   const [invoiceForm, setInvoiceForm] = useState(null);
   const [isViewMode, setIsViewMode] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [counter, setCounter] = useState(1);
 
   
 
@@ -543,7 +545,15 @@ function InvoiceDetailScreen(props) {
     dispatch,
     allInvoiceDetails,
   ]);
+  useEffect(() => {
+    // Simula un bucle incrementando el contador cada segundo (puedes ajustar esto según tus necesidades)
+    const interval = setInterval(() => {
+      setCounter((prevCounter) => prevCounter + 1);
+    }, 1000);
 
+    // Limpia el intervalo cuando el componente se desmonta
+    return () => clearInterval(interval);
+  }, []);
   useEffect(() => {
     if (selectedClient !== null) {
       // Si elige cliente existente y este formulario es nuevo
@@ -684,18 +694,18 @@ function InvoiceDetailScreen(props) {
                 }
               >
                 <p className="font-bold mb-2">
-                  {invoiceForm?.companyDetail?.companyName || "Nombre de la empresa"}
+                  {invoiceForm?.companyDetail?.companyName || "LA KSE Farm"}
                 </p>
                 <p className="text-sm font-medium">
                   {invoiceForm?.companyDetail?.billingAddress ||
-                    "Por favor, añada los datos de la empresa"}
+                    "LaKSEFarm"}
                 </p>
                 <p className="text-sm font-medium">
-                  {invoiceForm?.companyDetail?.companyMobile || "dirección de la empresa"}
+                  {invoiceForm?.companyDetail?.companyMobile || "Av. Ejercito 312"}
                 </p>
                 <p className="text-sm font-medium">
                   {invoiceForm?.companyDetail?.companyEmail ||
-                    "Empresa@email.com"}
+                    "LAks3Farm@email.com"}
                 </p>
               </div>
             </div>
@@ -734,8 +744,15 @@ function InvoiceDetailScreen(props) {
                       autoComplete="nope"
                       placeholder="Nombre del cliente"
                       className={defaultInputSmStyle}
+                      disabled={true}
                       value={invoiceForm?.clientDetail?.name}
-                      onChange={(e) => handlerInvoiceClientValue(e, "name")}
+                      onChange={(e) => {
+                        const inputValue = e.target.value;
+                        const nameRegex = /^[a-zA-Z\s]*$/;
+                        if (nameRegex.test(inputValue) || inputValue === "") {
+                          handlerInvoiceClientValue(e, "name");
+                        }
+                      }}
                     />
                   ) : (
                     invoiceForm?.clientDetail?.name
@@ -751,6 +768,7 @@ function InvoiceDetailScreen(props) {
                       autoComplete="nope"
                       placeholder="Dirección del cliente"
                       className={defaultInputSmStyle}
+                      disabled={true}
                       value={invoiceForm?.clientDetail?.billingAddress}
                       onChange={(e) =>
                         handlerInvoiceClientValue(e, "billingAddress")
@@ -770,6 +788,7 @@ function InvoiceDetailScreen(props) {
                       autoComplete="nope"
                       placeholder="Móvil del cliente"
                       className={defaultInputSmStyle}
+                      disabled={true}
                       value={invoiceForm?.clientDetail?.mobileNo}
                       onChange={(e) => handlerInvoiceClientValue(e, "mobileNo")}
                     />
@@ -787,6 +806,7 @@ function InvoiceDetailScreen(props) {
                       autoComplete="nope"
                       placeholder="Correo del cliente"
                       className={defaultInputSmStyle}
+                      disabled={true}
                       value={invoiceForm?.clientDetail?.email}
                       onChange={(e) => handlerInvoiceClientValue(e, "email")}
                     />
@@ -805,7 +825,8 @@ function InvoiceDetailScreen(props) {
                       autoComplete="nope"
                       placeholder="Nº de factura"
                       className={defaultInputSmStyle + " text-right"}
-                      value={invoiceForm.invoiceNo}
+                      value={counter}
+                      disabled={true}
                       onChange={(e) => handlerInvoiceValue(e, "invoiceNo")}
                     />
                   ) : (
@@ -849,13 +870,14 @@ function InvoiceDetailScreen(props) {
               </div>
               {!isViewMode && (
                 <div className="flex flex-row justify-between items-center mb-1">
-                  <div className="font-title flex-1"> Cambiar moneda </div>
+                  <div className="font-title flex-1"> Moneda </div>
                   <div className="font-title flex-1 text-right">
                     <input
                       autoComplete="nope"
                       placeholder="Invoice No"
                       className={defaultInputSmStyle + " text-right"}
-                      value={invoiceForm.currencyUnit}
+                      disabled={true}
+                      value={"Soles"}
                       onChange={(e) => handlerInvoiceValue(e, "currencyUnit")}
                     />
                   </div>
