@@ -972,6 +972,7 @@ function InvoiceDetailScreen(props) {
                       <input
                         autoComplete="nope"
                         value={product.name}
+                        disabled={true}
                         placeholder="Nombre del producto"
                         className={defaultInputSmStyle + " text-right"}
                         onChange={(e) =>
@@ -1006,6 +1007,7 @@ function InvoiceDetailScreen(props) {
                       <input
                         autoComplete="nope"
                         value={product.amount}
+                        disabled={true}
                         placeholder="Price"
                         type={"number"}
                         className={defaultInputSmStyle + " text-right"}
